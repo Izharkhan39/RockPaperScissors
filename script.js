@@ -5,21 +5,21 @@ let humanScore = 0;
 let compScore = 0;
 
 function getHumanChoice() {
-  Choice = prompt("Enter Rock,Paper or Scissor");
-  return Choice.toLowerCase();
+  let choice = prompt("Enter Rock,Paper or Scissor");
+  return choice.toLowerCase();
 }
 
 function getCompChoice() {
   let choices = ["rock", "paper", "scissor"];
-  Choice = getRandomChoice(choices);
-  return Choice;
+  return getRandomChoice(choices);
 }
 
 function getRandomChoice(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function playRound() {
+function playRound(roundNum) {
+  console.log(`~~~Round ${roundNum}~~~`);
   humanChoice = getHumanChoice();
   console.log(`HumanChoice: ${humanChoice}`);
 
@@ -32,19 +32,21 @@ function playRound() {
 }
 
 function playGame() {
-  for (let i = 0; i < 5; i++) {
-    playRound();
+  for (let i = 1; i < 6; i++) {
+    playRound(i);
   }
   if (humanScore > compScore) {
-    console.log("You win");
+    console.log("You won the game");
   } else if (humanScore === compScore) {
-    console.log("Its a tie");
+    console.log("Its a tie between you and the Computer");
   } else {
     console.log("Computer wins");
   }
   humanScore = 0;
   compScore = 0;
 }
+
+document.addEventListener("DOMContentLoaded", playGame);
 
 function getResult(userChoice, compChoice) {
   if (userChoice === compChoice) {
