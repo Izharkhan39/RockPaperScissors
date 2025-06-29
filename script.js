@@ -1,56 +1,113 @@
+import { showModal } from "./modal.js";
+
 let humanChoice = "";
 let compChoice = "";
 
 let humanScore = 0;
 let compScore = 0;
 
-function getHumanChoice() {
-  let choice = prompt("Enter Rock,Paper or Scissor");
-  return choice.toLowerCase();
+const humanSign = document.querySelector("#playerSign");
+const computerSign = document.querySelector("#computerSign");
+
+const humanScoreDisplay = document.querySelector("#playerScore");
+const computerScoreDisplay = document.querySelector("#computerScore");
+
+const userScoreInfo = document.querySelector("#score-info");
+const userScoreOutcome = document.querySelector("#score-message");
+const gameOutcome = document.querySelector("#endGameMsg");
+
+const choiceContainer = document.querySelector("#choices");
+
+const restartGameBtn = document.querySelector("#restartGame");
+
+function restartGame() {
+  location.reload();
+}
+
+function handleChoiceClick(event) {
+  const button = event.target.closest("button");
+
+  if (button && button.dataset.choice) {
+    humanChoice = button.dataset.choice;
+    playRound();
+  }
+}
+
+choiceContainer.addEventListener("click", handleChoiceClick);
+
+//Updates the Player Selection icon
+function updateChoices(humanChoice, compChoice) {
+  switch (humanChoice) {
+    case "rock":
+      humanSign.textContent = `✊`;
+      break;
+    case "paper":
+      humanSign.textContent = `✋`;
+      break;
+    case "scissor":
+      humanSign.textContent = `✌`;
+      break;
+  }
+
+  switch (compChoice) {
+    case "rock":
+      computerSign.textContent = `✊`;
+      break;
+    case "paper":
+      computerSign.textContent = `✋`;
+      break;
+    case "scissor":
+      computerSign.textContent = `✌`;
+      break;
+  }
 }
 
 function getCompChoice() {
   let choices = ["rock", "paper", "scissor"];
   return getRandomChoice(choices);
 }
-
 function getRandomChoice(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function playRound(roundNum) {
-  console.log(`~~~Round ${roundNum}~~~`);
-  humanChoice = getHumanChoice();
-  console.log(`HumanChoice: ${humanChoice}`);
-
+function playRound() {
   compChoice = getCompChoice();
-  console.log(`ComputerChoice: ${compChoice}`);
+
+  updateChoices(humanChoice, compChoice);
 
   getResult(humanChoice, compChoice);
-  console.log(`HumanScore: ${humanScore}`);
-  console.log(`ComputerScore: ${compScore}`);
-}
 
-function playGame() {
-  for (let i = 1; i < 6; i++) {
-    playRound(i);
+  if (humanScore === 5) {
+    gameOutcome.textContent = "You Won!";
+  } else if (compScore === 5) {
+    gameOutcome.textContent = "You Lost!";
   }
-  if (humanScore > compScore) {
-    console.log("You won the game");
-  } else if (humanScore === compScore) {
-    console.log("Its a tie between you and the Computer");
+
+  if (isGameOver()) {
+    choiceContainer.removeEventListener("click", handleChoiceClick);
+    restartGameBtn.addEventListener("click", restartGame);
+    showModal();
+  }
+}
+function isGameOver() {
+  if (humanScore === 5 && compScore < 5) {
+    return true;
+  } else if (compScore === 5 && humanScore < 5) {
+    return true;
   } else {
-    console.log("Computer wins");
+    return false;
   }
-  humanScore = 0;
-  compScore = 0;
 }
 
-document.addEventListener("DOMContentLoaded", playGame);
+function updateScore(humanScore, compScore) {
+  humanScoreDisplay.textContent = `Player: ${humanScore}`;
+  computerScoreDisplay.textContent = `Computer: ${compScore}`;
+}
 
 function getResult(userChoice, compChoice) {
   if (userChoice === compChoice) {
-    console.log("Its a Tie");
+    userScoreInfo.textContent = "Its a Tie";
+    userScoreOutcome.textContent = `${humanChoice} ties with ${compChoice}`;
     return;
   }
 
@@ -60,9 +117,14 @@ function getResult(userChoice, compChoice) {
     (userChoice === "scissor" && compChoice === "paper")
   ) {
     humanScore++;
-    console.log("You win this round");
+
+    userScoreInfo.textContent = "You won!";
+    userScoreOutcome.textContent = `${humanChoice} beats ${compChoice}`;
   } else {
     compScore++;
-    console.log("Computer wins this round");
+
+    userScoreInfo.textContent = "You lost!";
+    userScoreOutcome.textContent = `${humanChoice} is beaten by ${compChoice}`;
   }
+  updateScore(humanScore, compScore);
 }

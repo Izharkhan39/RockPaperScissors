@@ -4,8 +4,48 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="stylesheet" href="index.css" />
   </head>
   <body>
-    <script src="script.js"></script>
+    <header>
+      <h1>ROCK PAPER SCISSORS</h1>
+    </header>
+
+    <div class="scoreboard">
+      <h2 id="score-info">Choose options</h2>
+      <h3 id="score-message">First to score 5 points wins</h3>
+
+      <div class="score-container">
+        <div class="score-box">
+          <div class="sign" id="playerSign">❔</div>
+          <p class="score" id="playerScore">Player: 0</p>
+        </div>
+        <div class="score-box">
+          <div class="sign" id="computerSign">❔</div>
+          <p class="score" id="computerScore">Computer: 0</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="choice-btn" id="choices">
+      <button class="btn" data-choice="rock">
+        <div class="sign">✊</div>
+      </button>
+      <button class="btn" data-choice="paper">
+        <div class="sign">✋</div>
+      </button>
+      <button class="btn" data-choice="scissor">
+        <div class="sign">✌</div>
+      </button>
+    </div>
+
+    <div class="modal" id="endGameModal">
+      <div class="modal-content">
+        <p class="modal-title" id="endGameMsg">Game Outcome</p>
+        <button class="btn btn-restart" id="restartGame">Play again</button>
+      </div>
+    </div>
+    <script type="module" src="script.js"></script>
+    <script type="module" src="modal.js"></script>
   </body>
 </html>
